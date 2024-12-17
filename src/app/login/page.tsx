@@ -3,11 +3,10 @@
 import { useContext, useEffect, useState } from "react";
 import { IProvider, WALLET_ADAPTERS } from "@web3auth/base";
 
-import RPC from "@/app/wallet/ethersRPC";
 import { Web3AuthContext } from "@/app/contexts/web3auth";
 import { useRouter } from "next/navigation";
 
-function App() {
+function Login() {
   const router = useRouter();
   const { web3auth, provider, setProvider, loggedIn, setLoggedIn } =
     useContext(Web3AuthContext);
@@ -15,14 +14,11 @@ function App() {
   useEffect(() => {
     const init = async () => {
       try {
-        await web3auth.init();
         setProvider(web3auth.provider);
 
         if (web3auth.connected) {
           setLoggedIn(true);
           router.push("/dashboard");
-        } else {
-          router.push("/login");
         }
       } catch (error) {
         console.error(error);
@@ -32,7 +28,20 @@ function App() {
     init();
   }, []);
 
-  return <div></div>;
+  const login = async () => {
+    // IMP START - Login
+    const web3authProvider = await web3auth.connectTo(WALLET_ADAPTERS.AUTH, {
+      loginProvider: "google",
+    });
+    // IMP END - Login
+    setProvider(web3authProvider);
+    if (web3auth.connected) {
+      setLoggedIn(true);
+      router.push("/dashboard");
+    }
+  };
+
+  return <button onClick={login}>Log In</button>;
 }
 
-export default App;
+export default Login;
