@@ -41,10 +41,19 @@ export const Web3AuthContext = createContext<any>(undefined);
 export function Web3AuthWrapper({ children }: { children: React.ReactNode }) {
   const [provider, setProvider] = useState<IProvider | null>(null);
   const [loggedIn, setLoggedIn] = useState(false);
+  const [initiated, setInitiated] = useState(false);
 
   return (
     <Web3AuthContext.Provider
-      value={{ web3auth, provider, setProvider, loggedIn, setLoggedIn }}
+      value={{
+        web3auth,
+        provider,
+        setProvider,
+        loggedIn,
+        setLoggedIn,
+        initiated,
+        setInitiated,
+      }}
     >
       {children}
     </Web3AuthContext.Provider>

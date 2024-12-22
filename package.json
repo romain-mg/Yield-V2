@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@radix-ui/react-dialog": "^1.1.4",
     "@radix-ui/react-slot": "^1.1.1",
     "@tkey/common-types": "^15.2.1-alpha.0",
     "@toruslabs/tss-dkls-lib": "^4.1.0",

@@ -9,12 +9,23 @@ import { useRouter } from "next/navigation";
 
 function Dashboard() {
   const router = useRouter();
-  const { web3auth, provider, setProvider, loggedIn, setLoggedIn } =
-    useContext(Web3AuthContext);
+  const {
+    web3auth,
+    provider,
+    setProvider,
+    loggedIn,
+    setLoggedIn,
+    initiated,
+    setInitiated,
+  } = useContext(Web3AuthContext);
 
   useEffect(() => {
     const init = async () => {
       try {
+        if (!initiated) {
+          await web3auth.init();
+          setInitiated(true);
+        }
         setProvider(web3auth.provider);
 
         if (!web3auth.connected) {

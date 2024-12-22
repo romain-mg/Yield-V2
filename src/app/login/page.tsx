@@ -1,19 +1,32 @@
 "use client";
 
-import { useContext, useEffect, useState } from "react";
-import { IProvider, WALLET_ADAPTERS } from "@web3auth/base";
-
+import { useContext, useEffect } from "react";
+import { WALLET_ADAPTERS } from "@web3auth/base";
 import { Web3AuthContext } from "@/app/contexts/web3auth";
 import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import Navbar from "../components/navbar";
+import Image from "next/image";
 
 function Login() {
   const router = useRouter();
-  const { web3auth, provider, setProvider, loggedIn, setLoggedIn } =
-    useContext(Web3AuthContext);
+  const {
+    web3auth,
+    provider,
+    setProvider,
+    loggedIn,
+    setLoggedIn,
+    initiated,
+    setInitiated,
+  } = useContext(Web3AuthContext);
 
   useEffect(() => {
     const init = async () => {
       try {
+        if (!initiated) {
+          await web3auth.init();
+          setInitiated(true);
+        }
         setProvider(web3auth.provider);
 
         if (web3auth.connected) {
@@ -41,7 +54,34 @@ function Login() {
     }
   };
 
-  return <button onClick={login}>Log In</button>;
+  return (
+    <>
+      <Navbar></Navbar>
+      <main className="grid grid-cols-2 justify-center items-center p-32 gap-32">
+        <div className="text-center">
+          <p className="text-6xl font-bold">
+            WELCOME ON YIELD, THE ROBINHOOD OF FINANCE
+          </p>
+          <p className="text-3xl mt-16">
+            Earn the Highest Interest Rate on your Savings while Minimizing Risk
+          </p>
+          <Button
+            className="w-full mt-32 bg-red-600 hover:bg-red-500"
+            onClick={login}
+          >
+            Sign In with Google
+          </Button>
+        </div>
+
+        <Image
+          src="/interest.png"
+          width={800}
+          height={500}
+          alt="Picture of the interest rates"
+        />
+      </main>
+    </>
+  );
 }
 
 export default Login;
